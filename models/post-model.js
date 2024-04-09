@@ -1,6 +1,5 @@
 const mongoose = require("mongoose")
 
-
 const Schema = mongoose.Schema
 
 const PostSchema = new Schema({
@@ -12,7 +11,7 @@ const PostSchema = new Schema({
   },
   isPublished:{
     type:Boolean,
-    required:true
+    requird:true
   }
 })
 PostModel = mongoose.model("Post" , PostSchema)
