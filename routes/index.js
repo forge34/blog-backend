@@ -1,21 +1,25 @@
 const express = require("express");
 const router = express.Router();
+const authenticationController = require("../controllers/authentication-controller")
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.json(req.session)
 });
 
-router.get("/posts" , (req,res,next) => {
-  res.json("GET request to /post")
-})
+router.get("/posts" , )
 
-router.post("/posts" , (req,res,next) => {
-  res.json("POST request to /post")
-})
+router.post("/posts" , )
 
-router.get("/posts/:postid" , (req,res,next) => {
-  res.json("GET returns a specific post")
-})
+router.get("/posts/:postid" ,)
+
+router.get("/posts/:postid/comments")
+router.post("/posts/:postid/comments");
+
+router.get("/posts/:postid/comments/:commentid");
+
+router.post("/login" , authenticationController.loginPost);
+
+router.post("/signup" , authenticationController.signupPost);
 
 module.exports = router;

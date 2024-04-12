@@ -9,13 +9,13 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   membership: {
     type: String,
-    required: true,
   },
 });
 
 UserSchema.virtual("fullname").get(function () {
   return `${this.firstname} ${this.lastname}`;
 });
+
 
 const userModel = mongoose.model("User", UserSchema);
 module.exports = userModel;
