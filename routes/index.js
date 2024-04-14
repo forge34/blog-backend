@@ -9,7 +9,7 @@ router.get("/", function (req, res, next) {
     res.json(req.session);
 });
 
-router.get("/posts");
+router.get("/posts" , postController.getPosts);
 
 router.post("/posts", postController.createPost);
 

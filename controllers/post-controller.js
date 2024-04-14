@@ -3,6 +3,14 @@ const Posts = require("../models/post-model");
 const expressAsyncHandler = require("express-async-handler");
 const passport = require("passport");
 
+module.exports.getPosts = [
+    passport.authenticate("jwt", { session: false }),
+    expressAsyncHandler(async (req, res, next) => {
+        const posts = await Posts.find().exec();
+        res.json(posts);
+    }),
+];
+
 module.exports.createPost = [
     passport.authenticate("jwt", { session: false }),
     body("body").trim().isLength({ min: 1 }).escape(),
@@ -22,6 +30,8 @@ module.exports.createPost = [
             console.log(post);
             await post.save();
             res.json({ message: "Post created" });
+        } else {
+            res.status(403).json({ errors: errors });
         }
     }),
 ];
