@@ -40,7 +40,7 @@ const jwtStrat = new jwtStrategy(opts, async (payload, done) => {
     const user = await Users.findById(payload.id).exec();
 
     if (user) {
-        return done(null, true);
+        return done(null, user);
     } else {
         return done(null, false);
     }
@@ -56,4 +56,5 @@ passport.deserializeUser(async (id, done) => {
     const user = await Users.findById(id).select({ password: 0 }).exec();
     done(null, user);
 });
+
 passport.use(jwtStrat);

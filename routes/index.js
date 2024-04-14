@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authenticationController = require("../controllers/authentication-controller");
 const passport = require("passport");
+const postController = require("../controllers/post-controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -10,7 +11,7 @@ router.get("/", function (req, res, next) {
 
 router.get("/posts");
 
-router.post("/posts");
+router.post("/posts", postController.createPost);
 
 router.get("/posts/:postid");
 
@@ -23,8 +24,12 @@ router.post("/login", authenticationController.login);
 
 router.post("/signup", authenticationController.signup);
 
-router.post("/profile", passport.authenticate("jwt" , {session:false}), function (req, res) {
-    res.json("Test");
-});
+router.post(
+    "/profile",
+    passport.authenticate("jwt", { session:false}),
+     (req, res ,next) => {
+        res.json("Test");
+    }
+);
 
 module.exports = router;

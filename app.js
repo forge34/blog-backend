@@ -4,9 +4,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const indexRouter = require("./routes/index");
-const session = require("express-session")
-const mongoStore = require("connect-mongo");
-const passport = require("passport");
 const { runDB } = require("./config/database");
 
 const app = express();
@@ -14,26 +11,14 @@ const app = express();
 // run DB function
 runDB(process.env.DBURL)
 
-// Session setup
-app.use(
-  session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-    store:mongoStore.create({mongoUrl:process.env.DBURL ,ttl: 14 * 24 * 60 * 60 })
-  })
-);
-
-
-// Passport setup
-require("./config/passport")
-app.use(passport.session())
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+// Passport setup
+require("./config/passport")
 
 app.use("/", indexRouter);
 
