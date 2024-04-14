@@ -5,8 +5,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-module.exports.loginPost = (req, res, next) => {
-    console.log("before login")
+module.exports.login = (req, res, next) => {
     passport.authenticate("local", (err, user) => {
         if (err) {
             return next(err);
@@ -15,8 +14,7 @@ module.exports.loginPost = (req, res, next) => {
             res.redirect("/login");
         }
 
-        jwt.sign({id:user.id }, process.env.SECRET, (err, token) => {
-            console.log(token);
+        jwt.sign({ id: user.id }, process.env.SECRET, (err, token) => {
             req.login(user, (err) => {
                 if (err) {
                     return next(err);
@@ -26,9 +24,7 @@ module.exports.loginPost = (req, res, next) => {
     })(req, res, next);
 };
 
-module.exports.signupPost = expressAsyncHandler(async (req, res, next) => {
-    console.log(req.body);
-
+module.exports.signup = expressAsyncHandler(async (req, res, next) => {
     bycrpt.hash(
         req.body.password,
         10,
@@ -42,6 +38,5 @@ module.exports.signupPost = expressAsyncHandler(async (req, res, next) => {
             console.log(user);
         })
     );
-
     res.json(`user registered`);
 });

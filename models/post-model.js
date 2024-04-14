@@ -7,7 +7,8 @@ const PostSchema = new Schema({
   body:{type:String , required:true},
   author:{
     type:mongoose.Schema.ObjectId,
-    ref:"User"
+    ref:"User",
+    required:true
   },
   isPublished:{
     type:Boolean,

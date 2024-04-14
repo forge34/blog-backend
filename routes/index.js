@@ -19,9 +19,9 @@ router.post("/posts/:postid/comments");
 
 router.get("/posts/:postid/comments/:commentid");
 
-router.post("/login", authenticationController.loginPost);
+router.post("/login", authenticationController.login);
 
-router.post("/signup", authenticationController.signupPost);
+router.post("/signup", authenticationController.signup);
 
 router.post("/profile", passport.authenticate("jwt" , {session:false}), function (req, res) {
     res.json("Test");
