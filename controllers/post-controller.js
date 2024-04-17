@@ -3,6 +3,16 @@ const Posts = require("../models/post-model");
 const expressAsyncHandler = require("express-async-handler");
 const passport = require("passport");
 
+
+
+module.exports.getPost = [
+    passport.authenticate("jwt" , {session:false}),
+    expressAsyncHandler(async(req,res,next) => {
+        const post = await Posts.findById(req.params.postid).exec()
+        res.json(post);        
+    })
+]
+
 module.exports.getPosts = [
     passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {

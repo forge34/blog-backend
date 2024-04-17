@@ -13,7 +13,7 @@ router.get("/posts" , postController.getPosts);
 
 router.post("/posts", postController.createPost);
 
-router.get("/posts/:postid");
+router.get("/posts/:postid" , postController.getPost);
 
 router.get("/posts/:postid/comments");
 router.post("/posts/:postid/comments");
