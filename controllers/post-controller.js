@@ -3,15 +3,31 @@ const Posts = require("../models/post-model");
 const expressAsyncHandler = require("express-async-handler");
 const passport = require("passport");
 
+module.exports.deletePost = [
+    passport.authenticate("jwt", { session: false }),
+    expressAsyncHandler(async (req, res, next) => {
+        const post = await Posts.findById(req.params.postid)
+            .populate("author", "username")
+            .exec();
 
+        if (req.user.isAdmin || post.author.username === req.user.username) {
+            await Posts.deleteOne(post._id);
+            res.status(200).json("Delete success");
+        } else {
+            res.status(403).json({
+                errors: ["Failed to delete ,  Users does not have permission"],
+            });
+        }
+    }),
+];
 
 module.exports.getPost = [
-    passport.authenticate("jwt" , {session:false}),
-    expressAsyncHandler(async(req,res,next) => {
-        const post = await Posts.findById(req.params.postid).exec()
-        res.json(post);        
-    })
-]
+    passport.authenticate("jwt", { session: false }),
+    expressAsyncHandler(async (req, res, next) => {
+        const post = await Posts.findById(req.params.postid).exec();
+        res.json(post);
+    }),
+];
 
 module.exports.getPosts = [
     passport.authenticate("jwt", { session: false }),
