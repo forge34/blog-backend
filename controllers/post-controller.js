@@ -49,7 +49,6 @@ module.exports.createPost = [
     body("isPublished").toBoolean(),
     expressAsyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        consolr.log(req.body);
         if (errors.isEmpty()) {
             const post = new Posts({
                 title: req.body.title,
@@ -57,7 +56,6 @@ module.exports.createPost = [
                 author: req.user,
                 isPublished: req.body.isPublished,
             });
-            console.log(post);
             await post.save();
             res.json({ message: "Post created" });
         } else {

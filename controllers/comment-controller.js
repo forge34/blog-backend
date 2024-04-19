@@ -39,7 +39,7 @@ module.exports.createComment = [
             await comment.save();
 
             await Posts.updateOne(
-                { id: req.params.postid },
+                { _id: req.params.postid },
                 { $push: { comments: comment } },
             );
             res.status(200).json("Comment create sucess");
