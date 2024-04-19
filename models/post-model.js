@@ -14,6 +14,7 @@ const PostSchema = new Schema({
         type: Boolean,
         requird: true,
     },
+  comments:[{type:mongoose.Schema.ObjectId,ref:"Comment"}]
 });
 
 const PostModel = mongoose.model("Post", PostSchema);

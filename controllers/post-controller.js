@@ -10,7 +10,12 @@ module.exports.deletePost = [
             .populate("author", "username")
             .exec();
 
-        if (req.user.isAdmin || post.author.username === req.user.username) {
+        if (!post) {
+            res.status(404).json({ errors: ["Post not found"] });
+        } else if (
+            req.user.isAdmin ||
+            post.author.username === req.user.username
+        ) {
             await Posts.deleteOne(post._id);
             res.status(200).json("Delete success");
         } else {
@@ -46,7 +51,6 @@ module.exports.createPost = [
         const errors = validationResult(req);
         consolr.log(req.body);
         if (errors.isEmpty()) {
-            console.log(req.user);
             const post = new Posts({
                 title: req.body.title,
                 body: req.body.body,
