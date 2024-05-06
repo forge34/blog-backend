@@ -23,7 +23,6 @@ const verify = expressAsyncHandler(async (username, password, done) => {
         return done(null, false), { message: "Invalid password" };
     }
 
-    console.log("logged in sucessfully");
     return done(null, user);
 });
 

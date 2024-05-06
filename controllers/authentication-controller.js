@@ -9,13 +9,13 @@ module.exports.login = (req, res, next) => {
     passport.authenticate("local", (err, user) => {
         if (err) {
             return next(err);
-        }
-        if (!user) {
+        } else if (!user) {
             res.redirect("/login");
         }
 
         jwt.sign({ id: user.id }, process.env.SECRET, (err, token) => {
             req.login(user, (err) => {
+                console.log(err);
                 if (err) {
                     return next(err);
                 } else res.json({ message: "Login success", token });
@@ -36,7 +36,7 @@ module.exports.signup = expressAsyncHandler(async (req, res, next) => {
 
             await user.save();
             console.log(user);
-        })
+        }),
     );
     res.json(`user registered`);
 });
