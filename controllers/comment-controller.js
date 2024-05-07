@@ -44,7 +44,7 @@ module.exports.createComment = [
             );
             res.status(200).json("Comment create sucess");
         } else {
-            res.status(404).json({ errors });
+            res.status(403).json({ errors });
         }
     }),
 ];

@@ -11,19 +11,13 @@ const verify = expressAsyncHandler(async (username, password, done) => {
         .where("username")
         .equals(username)
         .exec();
-
     if (!user) {
         return done(null, false, { message: "User doesn't exist" });
     }
-
-    const match = bcrypt.compare(password, user.password);
-
-    if (!match) {
-        console.log("invalid pass");
-        return done(null, false), { message: "Invalid password" };
-    }
-
-    return done(null, user);
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+        return done(null, user);
+    } else return done(null, false), { message: "Invalid password" };
 });
 
 const localStrat = new localStrategy(verify);

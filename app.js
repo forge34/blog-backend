@@ -38,8 +38,6 @@ app.use(
     }),
 );
 
-app.use(express.static(path.join(__dirname, "public")));
-
 // Passport setup
 require("./config/passport");
 app.use(passport.session());
