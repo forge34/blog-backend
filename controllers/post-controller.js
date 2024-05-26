@@ -37,7 +37,10 @@ module.exports.getPost = [
 module.exports.getPosts = [
     passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
-        const posts = await Posts.find().exec();
+        const posts = await Posts.find()
+            .populate("author", "username")
+            .populate("comments")
+            .exec();
         res.json(posts);
     }),
 ];

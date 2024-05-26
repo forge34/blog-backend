@@ -14,11 +14,10 @@ module.exports.login = [
 
         if (errors.isEmpty()) {
             next();
-        } else res.status(404).json({ errors: errors });
+        } else res.status(404).json({ errors });
     },
-  // passport local authenticatation request
+    // passport local authenticatation request
     (req, res, next) => {
-        console.log(req.body);
         passport.authenticate("local", (err, user) => {
             if (err) {
                 return next(err);
@@ -45,15 +44,35 @@ module.exports.login = [
 ];
 
 module.exports.signup = [
-    body("username").trim().isLength({ max: 128 }).escape(),
+    body("username")
+        .trim()
+        .isLength({ max: 128 })
+        .custom(async (val) => {
+            const user = await User.findOne()
+                .where("username")
+                .equals(val)
+                .exec();
+
+            if (user) {
+                throw new Error("Username already in use");
+            }
+        })
+        .escape(),
     body("password").trim().isLength({ min: 8 }).escape(),
+    body("confirmPassword")
+        .trim()
+        .isLength({ min: 8 })
+        .custom((value, { req }) => {
+            return value === req.body.password;
+        })
+        .escape(),
     body("isAdmin").toBoolean(),
     (req, res, next) => {
         const errors = validationResult(req);
 
         if (errors.isEmpty()) {
             next();
-        } else return res.status(404).json({ errors: errors });
+        } else return res.status(404).json({ errors });
     },
     expressAsyncHandler(async (req, res, _next) => {
         bycrpt.hash(
@@ -63,6 +82,7 @@ module.exports.signup = [
                 const user = new User({
                     username: req.body.username,
                     password: hashed,
+                    isAdmin: req.body.isAdmin,
                 });
 
                 await user.save();
