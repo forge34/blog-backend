@@ -10,6 +10,14 @@ router.get("/", function (req, res, next) {
     res.json(req.session);
 });
 
+router.get(
+    "/verify",
+    passport.authenticate("jwt", { session: false }),
+    (req, res, next) => {
+        return res.status(200).json({ message: "Vertifcation sucess" });
+    },
+);
+
 // Get & Create post routes
 router.get("/posts", postController.getPosts);
 router.post("/posts", postController.createPost);
@@ -21,7 +29,10 @@ router.delete("/posts/:postid", postController.deletePost);
 // Comment routes
 router.get("/posts/:postid/comments", commentsController.getComments);
 router.post("/posts/:postid/comments", commentsController.createComment);
-router.delete("/posts/:postid/comments/:commentid" , commentsController.deleteComment);
+router.delete(
+    "/posts/:postid/comments/:commentid",
+    commentsController.deleteComment,
+);
 
 // authenticatation routes
 router.post("/login", authenticationController.login);
