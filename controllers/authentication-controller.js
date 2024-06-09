@@ -69,10 +69,9 @@ module.exports.signup = [
     body("isAdmin").toBoolean(),
     (req, res, next) => {
         const errors = validationResult(req);
-
         if (errors.isEmpty()) {
             next();
-        } else return res.status(404).json({ errors });
+        } else return res.status(422).json({ errors });
     },
     expressAsyncHandler(async (req, res, _next) => {
         bycrpt.hash(

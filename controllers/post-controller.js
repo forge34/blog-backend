@@ -27,7 +27,6 @@ module.exports.deletePost = [
 ];
 
 module.exports.getPost = [
-    passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
         const post = await Posts.findById(req.params.postid).exec();
         res.json(post);
@@ -35,7 +34,6 @@ module.exports.getPost = [
 ];
 
 module.exports.getPosts = [
-    passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
         const posts = await Posts.find()
             .populate("author", "username")

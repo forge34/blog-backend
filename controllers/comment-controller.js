@@ -50,7 +50,6 @@ module.exports.createComment = [
 ];
 
 module.exports.getComments = [
-    passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
         const comments = await Comments.find().exec();
         res.json(comments);
