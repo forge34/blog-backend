@@ -34,6 +34,7 @@ module.exports.getPost = [
 ];
 
 module.exports.getPosts = [
+    passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
         const posts = await Posts.find()
             .populate("author", "username")
@@ -45,7 +46,7 @@ module.exports.getPosts = [
 
 module.exports.createPost = [
     passport.authenticate("jwt", { session: false }),
-    body("body").trim().isLength({ min: 1 }).escape(),
+    body("body").isLength({ min: 1 }),
     body("title").trim().isLength({ min: 1 }).escape(),
     body("isPublished").toBoolean(),
     expressAsyncHandler(async (req, res, next) => {
