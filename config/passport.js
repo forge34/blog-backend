@@ -4,7 +4,7 @@ const localStrategy = require("passport-local");
 const Users = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 const jwtStrategy = require("passport-jwt").Strategy;
-const extract = require("passport-jwt").ExtractJwt;
+// const extract = require("passport-jwt").ExtractJwt;
 
 const verify = expressAsyncHandler(async (username, password, done) => {
     const user = await Users.findOne()
@@ -23,14 +23,25 @@ const verify = expressAsyncHandler(async (username, password, done) => {
 const localStrat = new localStrategy(verify);
 
 /* Jwt implementation */
+const cookieExtractor = (req) => {
+    let jwt = null;
 
+    if (req && req.cookies) {
+        jwt = req.cookies["jwt"];
+    }
+
+    return jwt;
+};
 // JWT options
 const opts = {};
-opts.jwtFromRequest = extract.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = cookieExtractor; //extract.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = process.env.SECRET;
 
 const jwtStrat = new jwtStrategy(opts, async (payload, done) => {
-    const user = await Users.findById(payload.id).exec();
+    const user = await Users.findById(payload.id, {
+        username: 1,
+        role: 1,
+    }).exec();
 
     if (user) {
         return done(null, user);

@@ -31,11 +31,15 @@ module.exports.login = [
                         if (err) {
                             return next(err);
                         } else
-                            res.json({
-                                message: "Login success",
-                                token,
-                                userId: user.id,
+                            res.cookie("jwt", token, {
+                                secure: true,
+                                httpOnly: true,
                             });
+                        res.json({
+                            message: "Login success",
+                            // token,
+                            userId: user.id,
+                        });
                     });
                 });
             }
