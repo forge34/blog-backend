@@ -12,9 +12,12 @@ const PostSchema = new Schema({
     },
     isPublished: {
         type: Boolean,
-        requird: true,
     },
-  comments:[{type:mongoose.Schema.ObjectId,ref:"Comment"}]
+    date: {
+        type: Date,
+        default: Date.now,
+    },
+    comments: [{ type: mongoose.Schema.ObjectId, ref: "Comment" }],
 });
 
 const PostModel = mongoose.model("Post", PostSchema);

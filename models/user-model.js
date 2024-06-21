@@ -8,7 +8,11 @@ const UserSchema = new Schema({
     membership: {
         type: String,
     },
-    isAdmin: { type: Boolean },
+    role: {
+        type: String,
+        enum: ["EDITOR", "ADMIN", "NORMAL"],
+        default: "NOMRAL",
+    },
 });
 
 UserSchema.virtual("fullname").get(function () {
