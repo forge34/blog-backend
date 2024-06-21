@@ -13,8 +13,8 @@ module.exports.deletePost = [
         if (!post) {
             res.status(404).json({ errors: ["Post not found"] });
         } else if (
-            req.user.isAdmin ||
-            post.author.username === req.user.username
+            req.user.role == "ADMIN" ||
+            post.author._id === req.user._id
         ) {
             await Posts.deleteOne(post._id);
             res.status(200).json("Delete success");
@@ -28,13 +28,15 @@ module.exports.deletePost = [
 
 module.exports.getPost = [
     expressAsyncHandler(async (req, res, next) => {
-        const post = await Posts.findById(req.params.postid).exec();
+        const post = await Posts.findById(req.params.postid)
+            .populate("author", "username")
+            .populate("comments")
+            .exec();
         res.json(post);
     }),
 ];
 
 module.exports.getPosts = [
-    passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
         const posts = await Posts.find()
             .populate("author", "username")
