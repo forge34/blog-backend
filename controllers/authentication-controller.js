@@ -7,14 +7,26 @@ const { body, validationResult } = require("express-validator");
 require("dotenv").config();
 
 module.exports.login = [
-    body("username").trim().escape(),
-    body("password").trim().escape(),
+    body("username")
+        .trim()
+        .isLength({ min: 1 })
+        .withMessage("Username too short")
+        .escape(),
+    body("password")
+        .trim()
+        .isLength({ min: 6 })
+        .withMessage("Password should be atleast 6 chars")
+        .escape(),
     (req, res, next) => {
         const errors = validationResult(req);
 
         if (errors.isEmpty()) {
             next();
-        } else res.status(404).json({ errors });
+        } else
+            res.status(401).json({
+                username: errors.errors[0],
+                password: errors.errors[1],
+            });
     },
     // passport local authenticatation request
     (req, res, next) => {
@@ -23,7 +35,7 @@ module.exports.login = [
                 return next(err);
             } else if (!user) {
                 res.status(401).json({
-                    errors: ["Login failed ,invalid username or password"],
+                    error: "Login failed ,invalid username or password",
                 });
             } else {
                 jwt.sign({ id: user.id }, process.env.SECRET, (_err, token) => {
@@ -35,10 +47,8 @@ module.exports.login = [
                                 secure: true,
                                 httpOnly: true,
                             });
-                        res.json({
-                            message: "Login success",
-                            // token,
-                            userId: user.id,
+                        res.status(200).json({
+                            ok: true,
                         });
                     });
                 });
