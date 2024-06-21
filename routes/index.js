@@ -4,19 +4,12 @@ const authenticationController = require("../controllers/authentication-controll
 const passport = require("passport");
 const postController = require("../controllers/post-controller");
 const commentsController = require("../controllers/comment-controller");
+const userController = require("../controllers/user-controller");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
     res.json(req.session);
 });
-
-router.get(
-    "/verify",
-    passport.authenticate("jwt", { session: false }),
-    (req, res, next) => {
-        return res.status(200).json({ message: "Vertifcation sucess" });
-    },
-);
 
 // Get & Create post routes
 router.get("/posts", postController.getPosts);
@@ -34,17 +27,21 @@ router.delete(
     commentsController.deleteComment,
 );
 
+// User routes
+router.get(
+    "/users/verify",
+    passport.authenticate("jwt", { session: false }),
+    (req, res, next) => {
+        return res
+            .status(200)
+            .json({ message: "vertifcation sucess", user: req.user });
+    },
+);
+router.get("/user/posts", userController.getPosts);
+router.get("/usercomments");
+
 // authenticatation routes
 router.post("/login", authenticationController.login);
 router.post("/signup", authenticationController.signup);
-
-// Test routes
-router.post(
-    "/profile",
-    passport.authenticate("jwt", { session: false }),
-    (req, res, next) => {
-        res.json("Test");
-    },
-);
 
 module.exports = router;
