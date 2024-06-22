@@ -51,14 +51,12 @@ const jwtStrat = new jwtStrategy(opts, async (payload, done) => {
 });
 
 passport.use(localStrat);
-
+passport.use(jwtStrat);
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
     const user = await Users.findById(id).select({ password: 0 }).exec();
-    done(null, user);
+    done(null, true);
 });
-
-passport.use(jwtStrat);

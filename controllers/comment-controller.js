@@ -17,7 +17,7 @@ module.exports.deleteComment = [
             req.user.isAdmin ||
             comment.author.username === req.user.username
         ) {
-            await Comments.deleteOne({ id: comment.id });
+            await Comments.deleteOne(comment._id);
             res.status(200).json("Comment deletion success");
         } else {
             res.status(403).json({ errors: ["Access denied"] });
@@ -34,6 +34,7 @@ module.exports.createComment = [
             const comment = new Comments({
                 body: req.body.body,
                 author: req.user,
+                postId: req.params.postid,
             });
 
             await comment.save();

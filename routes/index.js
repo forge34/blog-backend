@@ -23,7 +23,7 @@ router.delete("/posts/:postid", postController.deletePost);
 router.get("/posts/:postid/comments", commentsController.getComments);
 router.post("/posts/:postid/comments", commentsController.createComment);
 router.delete(
-    "/posts/:postid/comments/:commentid",
+    "/comments/:commentid",
     commentsController.deleteComment,
 );
 
@@ -38,7 +38,7 @@ router.get(
     },
 );
 router.get("/user/posts", userController.getPosts);
-router.get("/usercomments");
+router.get("/user/comments", userController.getComments);
 
 // authenticatation routes
 router.post("/login", authenticationController.login);
