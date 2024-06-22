@@ -58,5 +58,5 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     const user = await Users.findById(id).select({ password: 0 }).exec();
-    done(null, true);
+    done(null, user);
 });

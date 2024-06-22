@@ -30,7 +30,14 @@ module.exports.getPost = [
     expressAsyncHandler(async (req, res, next) => {
         const post = await Posts.findById(req.params.postid)
             .populate("author", "username")
-            .populate("comments")
+            .populate({
+                path: "comments",
+                populate: {
+                    path: "author",
+                    select: { username: 1 },
+                },
+            })
+
             .exec();
         res.json(post);
     }),
@@ -38,10 +45,7 @@ module.exports.getPost = [
 
 module.exports.getPosts = [
     expressAsyncHandler(async (req, res, next) => {
-        const posts = await Posts.find()
-            .populate("author", "username")
-            .populate("comments")
-            .exec();
+        const posts = await Posts.find().populate("author", "username").exec();
         res.json(posts);
     }),
 ];
