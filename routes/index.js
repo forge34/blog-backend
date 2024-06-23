@@ -18,14 +18,12 @@ router.post("/posts", postController.createPost);
 // single post routes
 router.get("/posts/:postid", postController.getPost);
 router.delete("/posts/:postid", postController.deletePost);
+router.put("/posts/:postid/edit", postController.editPost);
 
 // Comment routes
 router.get("/posts/:postid/comments", commentsController.getComments);
 router.post("/posts/:postid/comments", commentsController.createComment);
-router.delete(
-    "/comments/:commentid",
-    commentsController.deleteComment,
-);
+router.delete("/comments/:commentid", commentsController.deleteComment);
 
 // User routes
 router.get(

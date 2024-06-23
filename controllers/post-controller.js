@@ -71,3 +71,21 @@ module.exports.createPost = [
         }
     }),
 ];
+
+module.exports.editPost = [
+    passport.authenticate("jwt", { session: false }),
+    body("newBody").isLength({ min: 1 }).escape(),
+    body("newTitle").trim().isLength({ min: 1 }).escape(),
+    expressAsyncHandler(async (req, res) => {
+        const errors = validationResult(req);
+
+        if (errors.isEmpty()) {
+            await Posts.findOneAndUpdate(
+                { _id: req.params.postid },
+                { title: req.body.newTitle, body: req.body.newBody },
+            );
+
+            res.status(200).json("Post updated");
+        }
+    }),
+];
