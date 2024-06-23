@@ -20,7 +20,6 @@ module.exports.getPosts = [
 module.exports.getComments = [
     passport.authenticate("jwt", { session: false }),
     expressAsyncHandler(async (req, res, next) => {
-        console.log(req.user);
         const posts = await Comments.find({
             author: {
                 _id: req.user._id,

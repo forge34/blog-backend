@@ -24,12 +24,13 @@ router.put("/posts/:postid/edit", postController.editPost);
 router.get("/posts/:postid/comments", commentsController.getComments);
 router.post("/posts/:postid/comments", commentsController.createComment);
 router.delete("/comments/:commentid", commentsController.deleteComment);
+router.put("/comments/:commentid/edit", commentsController.editComment);
 
 // User routes
 router.get(
     "/users/verify",
     passport.authenticate("jwt", { session: false }),
-    (req, res, next) => {
+    (req, res) => {
         return res
             .status(200)
             .json({ message: "vertifcation sucess", user: req.user });

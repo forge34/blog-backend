@@ -56,3 +56,20 @@ module.exports.getComments = [
         res.json(comments);
     }),
 ];
+
+module.exports.editComment = [
+    passport.authenticate("jwt", { session: false }),
+    body("editedComment").trim().isLength({ min: 1 }).escape(),
+    expressAsyncHandler(async (req, res) => {
+        const errors = validationResult(req);
+        if (errors.isEmpty()) {
+            const doc = await Comments.findOneAndUpdate(
+                { _id: req.params.commentid },
+                { body: req.body.editedComment },
+            );
+            res.status(200).json("Comment updated");
+        } else {
+            res.status(403).json(errors);
+        }
+    }),
+];
