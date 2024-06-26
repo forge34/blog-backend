@@ -10,12 +10,17 @@ const mongoStore = require("connect-mongo");
 const passport = require("passport");
 
 const app = express();
-
+require("dotenv").config();
 // run DB function
 runDB(process.env.DBURL);
 
 const corsOptions = {
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: [
+        "https://forge-blog-frontend.netlify.app/",
+        "http://localhost:5173",
+        "https://forge-blog-cms.netlify.app/",
+        "http://localhost:5174",
+    ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
 };
