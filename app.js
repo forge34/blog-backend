@@ -16,10 +16,11 @@ runDB(process.env.DBURL);
 
 const corsOptions = {
     origin: [
-        "https://forge-blog-frontend.netlify.app/",
+        "https://forge-blog-frontend.netlify.app",
         "http://localhost:5173",
-        "https://forge-blog-cms.netlify.app/",
+        "https://forge-blog-cms.netlify.app",
         "http://localhost:5174",
+        "https://669687be0dc8453c1f4dbd8d--forge-blog-frontend.netlify.app",
     ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -47,6 +48,8 @@ app.use(
 // Passport setup
 require("./config/passport");
 app.use(passport.session());
+
+// Other
 app.use("/api", indexRouter);
 
 // catch 404 and forward to error handler
@@ -62,7 +65,7 @@ app.use(function (err, req, res, next) {
 
     // render the error page
     res.status(err.status || 500);
-    res.json("error");
+    res.json(err.message);
 });
 
 module.exports = app;

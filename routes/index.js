@@ -5,10 +5,11 @@ const passport = require("passport");
 const postController = require("../controllers/post-controller");
 const commentsController = require("../controllers/comment-controller");
 const userController = require("../controllers/user-controller");
+const createHttpError = require("http-errors");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-    res.json(req.session);
+    res.status(200).json("Index route");
 });
 
 // Get & Create post routes
@@ -29,13 +30,29 @@ router.put("/comments/:commentid/edit", commentsController.editComment);
 // User routes
 router.get(
     "/users/verify",
-    passport.authenticate("jwt", { session: false }),
+    function (req, res, next) {
+        passport.authenticate(
+            "jwt",
+            { session: false },
+            function (err, user, info) {
+                // If authentication failed, `user` will be set to false. If an exception occurred, `err` will be set.
+                if (err || !user) {
+                    // PASS THE ERROR OBJECT TO THE NEXT ROUTE i.e THE APP'S COMMON ERROR HANDLING MIDDLEWARE
+                    return next(createHttpError(401, info));
+                } else {
+                    return next();
+                }
+            },
+        )(req, res, next);
+    },
     (req, res) => {
-        return res
-            .status(200)
-            .json({ message: "vertifcation sucess", user: req.user });
+        res.status(200).json({
+            message: "vertifcation sucess",
+            user: req.user,
+        });
     },
 );
+
 router.get("/user/posts", userController.getPosts);
 router.get("/user/comments", userController.getComments);
 
