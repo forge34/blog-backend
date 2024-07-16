@@ -100,8 +100,8 @@ module.exports.signup = [
 
                 await user.save();
                 console.log(user);
+                res.json(`user registered`);
             }),
         );
-        res.json(`user registered`);
     }),
 ];
