@@ -35,6 +35,11 @@ app.use(cookieParser());
 // Session setup
 app.use(
     session({
+        cookie: {
+            sameSite: "none",
+            secure: true,
+            httpOnly: true,
+        },
         secret: process.env.SECRET,
         resave: false,
         saveUninitialized: true,

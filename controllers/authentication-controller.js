@@ -46,6 +46,7 @@ module.exports.login = [
                             res.cookie("jwt", token, {
                                 secure: true,
                                 httpOnly: true,
+                                sameSite: "none",
                             });
                         res.status(200).json({
                             ok: true,
