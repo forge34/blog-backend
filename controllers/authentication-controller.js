@@ -85,7 +85,7 @@ module.exports.signup = [
         const errors = validationResult(req);
         if (errors.isEmpty()) {
             next();
-        } else return res.status(422).json({ errors });
+        } else return res.status(403).json({ errors });
     },
     expressAsyncHandler(async (req, res, _next) => {
         bycrpt.hash(
@@ -95,12 +95,12 @@ module.exports.signup = [
                 const user = new User({
                     username: req.body.username,
                     password: hashed,
-                    isAdmin: req.body.isAdmin,
+                    role: req.body.isAdmin ? "ADMIN" : "NORMAL",
                 });
 
                 await user.save();
                 console.log(user);
-                res.json(`user registered`);
+                res.json({ ok: true, message: `user registered` });
             }),
         );
     }),

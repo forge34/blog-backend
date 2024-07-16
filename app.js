@@ -20,7 +20,7 @@ const corsOptions = {
         "http://localhost:5173",
         "https://forge-blog-cms.netlify.app",
         "http://localhost:5174",
-        "https://669687be0dc8453c1f4dbd8d--forge-blog-frontend.netlify.app",
+        "https://66969d8dc89110dde1a2691d--forge-blog-frontend.netlify.app",
     ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
