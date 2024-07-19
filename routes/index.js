@@ -37,15 +37,15 @@ router.get(
             function (err, user, info) {
                 // If authentication failed, `user` will be set to false. If an exception occurred, `err` will be set.
                 if (err || !user) {
-                    // PASS THE ERROR OBJECT TO THE NEXT ROUTE i.e THE APP'S COMMON ERROR HANDLING MIDDLEWARE
                     return next(createHttpError(401, info));
                 } else {
-                    return next();
+                    req.logIn(user, next);
                 }
             },
         )(req, res, next);
     },
     (req, res) => {
+        console.log(req.user);
         res.status(200).json({
             message: "vertifcation sucess",
             user: req.user,

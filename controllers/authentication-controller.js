@@ -38,23 +38,21 @@ module.exports.login = [
                     error: "Login failed ,invalid username or password",
                 });
             } else {
-                jwt.sign({ id: user.id }, process.env.SECRET, (_err, token) => {
-                    req.login(user, (err) => {
-                        if (err) {
-                            return next(err);
-                        } else
-                            res.cookie("jwt", token, {
-                                secure: true,
-                                httpOnly: true,
-                                sameSite: "none",
-                            });
-                        res.status(200).json({
-                            ok: true,
-                        });
-                    });
-                });
+                req.login(user, next);
             }
         })(req, res, next);
+    },
+    (req, res, next) => {
+        jwt.sign({ id: req.user.id }, process.env.SECRET, (_err, token) => {
+            res.cookie("jwt", token, {
+                secure: true,
+                httpOnly: true,
+                sameSite: "none",
+            });
+            res.status(200).json({
+                ok: true,
+            });
+        });
     },
 ];
 
